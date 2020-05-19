@@ -20,6 +20,7 @@ app.use(bodyParser.json());
 
 /** Set Controllers */
 app.use(require('../routes/usuario'));
+app.use(require('../routes/login'));
 
 startServer = (port) =>{
   app.listen(port, () => {

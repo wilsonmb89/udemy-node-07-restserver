@@ -18,3 +18,7 @@ if (process.env.NODE_ENV === 'dev') {
   mongoUrlConnection = `mongodb+srv://${mongodbUser}:${mongodbPassword}@wilsonapps-hcnto.mongodb.net/cafe`;
 }
 process.env.URL_MONGODB = mongoUrlConnection;
+// ====================
+//    JWT SEED
+// ====================
+process.env.JWT_SEED = process.env.JWT_SEED || 'SEED_DEV';

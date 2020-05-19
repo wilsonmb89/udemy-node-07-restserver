@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const uniqueValidator = require('mongoose-unique-validator');
+const bcrypt = require('bcrypt');
 
 const valoresValidos = {
   values: ['ADMIN_ROLE', 'USER_ROLE'],
@@ -45,6 +46,10 @@ usuarioSchema.methods.toJSON = function() {
   delete userObject.password;
   return userObject;
 };
+
+usuarioSchema.method('checkPassword', function(password) {
+  return !!password && bcrypt.compareSync(password, this.password);;
+});
 
 usuarioSchema.plugin(uniqueValidator, {message: '{PATH} debe ser único'});
 

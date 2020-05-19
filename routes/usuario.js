@@ -2,8 +2,10 @@ const express = require('express');
 const app = express();
 const Usuario = require('../models/usuario');
 const bcrypt = require('bcrypt');
+const validateToken = require('../middlewares/tokenValidation');
+const validateRole = require('../middlewares/roleValidation');
 
-app.get('/usuario', (req, res) => {
+app.get('/usuario', [validateToken], (req, res) => {
   const usersStatus = (req.query.usersStatus !== null && req.query.usersStatus !== undefined) ? req.query.usersStatus : true;
   const page = Number(req.query.page) || 1;
   const resultsPerPage = Number(req.query.resultsPerPage) || 10;
@@ -26,7 +28,7 @@ app.get('/usuario', (req, res) => {
     .catch(error => { res.status(500).json({ ok: false, error }); });
 });
 
-app.post('/usuario', (req, res) => {
+app.post('/usuario', [validateToken, validateRole], (req, res) => {
   const body = req.body;
   const usuario = new Usuario({
     nombre: body.nombre,
@@ -45,7 +47,7 @@ app.post('/usuario', (req, res) => {
   });
 });
 
-app.put('/usuario/:id', (req, res) => {
+app.put('/usuario/:id', [validateToken, validateRole], (req, res) => {
   const id = req.params.id;
   const body = req.body;
   Usuario.findById(id)
@@ -74,7 +76,7 @@ app.put('/usuario/:id', (req, res) => {
     .catch(err => res.status(500).json(err));
 });
 
-app.delete('/usuario/:id', (req, res) => {
+app.delete('/usuario/:id', [validateToken, validateRole], (req, res) => {
   const id = req.params.id;
   Usuario.findByIdAndDelete(id)
   .then(

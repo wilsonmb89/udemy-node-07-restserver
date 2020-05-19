@@ -1,10 +1,25 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
+const mongoose = require('mongoose');
+
+/** Mongoose connection */
+mongoose.connect(process.env.URL_MONGODB, 
+                  { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true},
+                  (err) => {
+                    if (!!err) {
+                      throw err;
+                    } else {
+                      console.log('Base de datos ONLINE');
+                    }
+                  });
 
 /** Set body-parser */
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+
+/** Set Controllers */
+app.use(require('../routes/usuario'));
 
 startServer = (port) =>{
   app.listen(port, () => {
@@ -12,22 +27,4 @@ startServer = (port) =>{
   });
 };
 
-app.get('/', (req, res) => {
-  res.json({res: 'GET method OK'});
-});
-
-app.post('/', (req, res) => {
-  const data = req.body;
-  console.log(data);
-  res.json({res: 'POST method OK', dataIn: data});
-});
-
-app.put('/', (req, res) => {
-  res.json({res: 'PUT method OK'});
-});
-
-app.delete('/', (req, res) => {
-  res.json({res: 'DELETE method OK'});
-});
-
-module.exports = { app, startServer };
+module.exports = { startServer };

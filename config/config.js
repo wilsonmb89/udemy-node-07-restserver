@@ -22,3 +22,7 @@ process.env.URL_MONGODB = mongoUrlConnection;
 //    JWT SEED
 // ====================
 process.env.JWT_SEED = process.env.JWT_SEED || 'SEED_DEV';
+// ====================
+//    JWT SEED
+// ====================
+process.env.GOOGLE_SIGN_IN_CLIENT_ID = process.env.GOOGLE_SIGN_IN_CLIENT_ID || '831496965479-54c4p69e84jigt14i8rg7771rmcnt37s.apps.googleusercontent.com';

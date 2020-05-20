@@ -32,6 +32,7 @@ const usuarioSchema = new Schema({
   role: {
     type: String,
     required: true,
+    default: 'USER_ROLE',
     enum: valoresValidos
   },
   estado: {

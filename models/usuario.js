@@ -49,7 +49,7 @@ usuarioSchema.methods.toJSON = function() {
 };
 
 usuarioSchema.method('checkPassword', function(password) {
-  return !!password && bcrypt.compareSync(password, this.password);;
+  return !!password && bcrypt.compareSync(password, this.password);
 });
 
 usuarioSchema.plugin(uniqueValidator, {message: '{PATH} debe ser único'});

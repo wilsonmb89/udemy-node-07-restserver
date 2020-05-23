@@ -25,6 +25,8 @@ app.use(express.static(path.resolve(__dirname, '../public')));
 /** Set Controllers */
 app.use(require('../routes/usuario'));
 app.use(require('../routes/login'));
+app.use(require('../routes/categoria'));
+app.use(require('../routes/producto'));
 
 startServer = (port) =>{
   app.listen(port, () => {

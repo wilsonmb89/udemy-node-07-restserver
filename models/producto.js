@@ -6,11 +6,15 @@ const productoSchema = new Schema({
     type: String,
     required: [true, 'El nombre es necesario']
   },
+  descripcion: {
+    type: String,
+    required: false
+  },
   precioUni: {
     type: Number,
     required: [true, 'El precio es necesario']
   },
-  descripcion: {
+  img: {
     type: String,
     required: false
   },

@@ -12,4 +12,16 @@ const validateToken = (req, res, next) => {
   .catch(error => res.status(401).json({ ok: false, mensaje: 'Token invalido', error}));
 };
 
-module.exports = validateToken;
+const validateTokenUrl = (req, res, next) => {
+  const userToken = req.query.userToken || '';
+  validateJWT(userToken)
+  .then(
+    decoded => {
+      req.usuario = decoded.usuario;
+      next();
+    }
+  )
+  .catch(error => res.status(401).json({ ok: false, mensaje: 'Token invalido', error}));
+};
+
+module.exports = { validateToken, validateTokenUrl };

@@ -1,8 +1,9 @@
 const express = require('express');
 const app = express();
 const Producto = require('../models/producto');
-const validateToken = require('../middlewares/tokenValidation');
+const { validateToken } = require('../middlewares/tokenValidation');
 const validateRole = require('../middlewares/roleValidation');
+const { removeFolder } = require('../utils/file-system');
 
 app.get('/producto/buscar/:termino', [validateToken], (req, res) => {
   const termino = req.params.termino;
@@ -70,6 +71,7 @@ app.post('/producto', [validateToken], (req, res) => {
     nombre: body.nombre,
     precioUni: body.precioUni,
     descripcion: body.descripcion,
+    img: body.img,
     disponible: body.disponible,
     categoria: body.categoria,
     usuario: body.usuario
@@ -95,6 +97,7 @@ app.put('/producto/:id', [validateToken], (req, res) => {
         productoDB.precioUni = body.precioUni || productoDB.precioUni;
         productoDB.descripcion = body.descripcion || productoDB.descripcion;
         productoDB.disponible = body.disponible || productoDB.disponible;
+        productoDB.img = body.img || productoDB.img;
         productoDB.categoria = body.categoria || productoDB.categoria;
         productoDB.usuario = body.usuario || productoDB.usuario;
         productoDB.save({ runValidations: true, new: true })
@@ -117,7 +120,8 @@ app.delete('/producto/:id', [validateToken, validateRole], (req, res) => {
         if (!deletedProducto) {
           return res.status(404).json({ ok: false, mensaje: 'No se encontró un producto con ese ID'});
         }
-        return res.status(200).json({ ok: true, producto: deletedProducto });
+        const deleteFolderResult = !!removeFolder('usuario', deletedUser._id);
+        return res.status(200).json({ ok: true, producto: deletedProducto, deletedImgFolder: deleteFolderResult });
       }
     )
     .catch(err => res.status(500).json({ ok: false, error: err }));

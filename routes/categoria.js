@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const Categoria = require('../models/categoria');
-const validateToken = require('../middlewares/tokenValidation');
+const { validateToken } = require('../middlewares/tokenValidation');
 const validateRole = require('../middlewares/roleValidation');
 
 app.get('/categoria', [validateToken], (req, res) => {

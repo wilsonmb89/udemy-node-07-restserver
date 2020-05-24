@@ -2,8 +2,9 @@ const express = require('express');
 const app = express();
 const Usuario = require('../models/usuario');
 const bcrypt = require('bcrypt');
-const validateToken = require('../middlewares/tokenValidation');
+const { validateToken } = require('../middlewares/tokenValidation');
 const validateRole = require('../middlewares/roleValidation');
+const { removeFolder } = require('../utils/file-system');
 
 app.get('/usuario', [validateToken], (req, res) => {
   const usersStatus = (req.query.usersStatus !== null && req.query.usersStatus !== undefined) ? req.query.usersStatus : true;
@@ -84,7 +85,8 @@ app.delete('/usuario/:id', [validateToken, validateRole], (req, res) => {
       if (!deletedUser) {
         return res.status(404).json({ ok: false, mensaje: 'No se encontró usuario para eliminar' });
       }
-      return res.status(200).json({ ok: true, deletedUser});
+      const deleteFolderResult = !!removeFolder('usuario', deletedUser._id);
+      return res.status(200).json({ ok: true, deletedUser, deletedImgFolder: deleteFolderResult});
     }
   )
   .catch(err => res.status(500).json(err));
